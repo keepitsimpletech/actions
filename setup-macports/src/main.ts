@@ -16,7 +16,7 @@ async function getMacPorts(versionSpec: string = "2.5.4") {
     let filename = "MacPorts-" + versionSpec + "-10.14-Mojave.pkg";
     let downloadUrl = "https://distfiles.macports.org/MacPorts/" + filename;
 
-    let downloadPath: string;
+    let downloadPath: string = "";
     try {
       downloadPath = await tc.downloadTool(downloadUrl);
     } catch (err) {
@@ -24,7 +24,7 @@ async function getMacPorts(versionSpec: string = "2.5.4") {
     }
     let exitCode = await exec.exec("sudo /usr/sbin/installer", [
       "-pkg",
-      filename,
+      downloadPath,
       "-target",
       "/"
     ]);
@@ -39,7 +39,7 @@ async function getMacPorts(versionSpec: string = "2.5.4") {
 
 async function run() {
   try {
-    getMacPorts();
+    await getMacPorts();
 
     if (core.getInput("UseHostCMake")) {
       const cmakePath = await io.which("cmake");

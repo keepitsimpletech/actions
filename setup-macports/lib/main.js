@@ -30,7 +30,7 @@ function getMacPorts(versionSpec = "2.5.4") {
             core.debug("MacPorts not found in tool-cache");
             let filename = "MacPorts-" + versionSpec + "-10.14-Mojave.pkg";
             let downloadUrl = "https://distfiles.macports.org/MacPorts/" + filename;
-            let downloadPath;
+            let downloadPath = "";
             try {
                 downloadPath = yield tc.downloadTool(downloadUrl);
             }
@@ -39,7 +39,7 @@ function getMacPorts(versionSpec = "2.5.4") {
             }
             let exitCode = yield exec.exec("sudo /usr/sbin/installer", [
                 "-pkg",
-                filename,
+                downloadPath,
                 "-target",
                 "/"
             ]);
@@ -54,7 +54,7 @@ function getMacPorts(versionSpec = "2.5.4") {
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            getMacPorts();
+            yield getMacPorts();
             if (core.getInput("UseHostCMake")) {
                 const cmakePath = yield io.which("cmake");
                 yield exec.exec("sudo ln", ["-s", cmakePath, "/opt/local/bin/cmake"]);
