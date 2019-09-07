@@ -1,10 +1,10 @@
-name: 'Node 12 Template Action'
-description: 'Get started with Node actions'
-author: 'GitHub'
+name: 'Setup MacPorts'
+description: 'Install MacPorts from pkg and add it to the PATH'
+author: 'Keep It Simple Technologies (KIST)'
 inputs:
-  myInput:
-    description: 'Input to use'
-    default: 'world'
+  UseHostCMake:
+    description: 'Use the current host's CMake in /usr/local/bin'
+    default: true
 runs:
   using: 'node12'
   main: 'lib/main.js'
