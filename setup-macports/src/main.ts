@@ -19,7 +19,7 @@ if (!tempDirectory) {
       baseLocation = "/home";
     }
   }
-  tempDirectory = path.join(baseLocation, "actions", "temp");
+  tempDirectory = path.join(baseLocation, "runner", "temp");
 }
 
 async function getMacPorts(versionSpec: string = "2.5.4") {
