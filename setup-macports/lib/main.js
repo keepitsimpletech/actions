@@ -15,11 +15,29 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// Load tempDirectory before it gets wiped by tool-cache
+let tempDirectory = process.env['RUNNER_TEMPDIRECTORY'] || '';
 const core = __importStar(require("@actions/core"));
 const io = __importStar(require("@actions/io"));
 const exec = __importStar(require("@actions/exec"));
 const tc = __importStar(require("@actions/tool-cache"));
 const path = __importStar(require("path"));
+if (!tempDirectory) {
+    let baseLocation;
+    if (process.platform === 'win32') {
+        // On windows use the USERPROFILE env variable
+        baseLocation = process.env['USERPROFILE'] || 'C:\\';
+    }
+    else {
+        if (process.platform === 'darwin') {
+            baseLocation = '/Users';
+        }
+        else {
+            baseLocation = '/home';
+        }
+    }
+    tempDirectory = path.join(baseLocation, 'actions', 'temp');
+}
 function getMacPorts(versionSpec = "2.5.4") {
     return __awaiter(this, void 0, void 0, function* () {
         // check cache
@@ -38,9 +56,13 @@ function getMacPorts(versionSpec = "2.5.4") {
             catch (err) {
                 core.setFailed("Could not download MacPorts: " + err);
             }
+            let tempDownloadFolder = 'temp_' + Math.floor(Math.random() * 2000000000);
+            let tempDir = path.join(tempDirectory, tempDownloadFolder);
+            yield io.mkdirP(tempDir);
+            yield io.cp(downloadPath, path.join(tempDir, filename));
             let exitCode = yield exec.exec("sudo /usr/sbin/installer", [
                 "-pkg",
-                path.join(downloadPath, filename),
+                path.join(tempDir, filename),
                 "-target",
                 "/"
             ]);
