@@ -3,7 +3,7 @@ description: 'Install MacPorts from pkg and add it to the PATH'
 author: 'Keep It Simple Technologies (KIST)'
 inputs:
   UseHostCMake:
-    description: 'Use the current host's CMake in /usr/local/bin'
+    description: 'Use the current hosts CMake in /usr/local/bin'
     default: true
 runs:
   using: 'node12'
