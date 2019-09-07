@@ -2,6 +2,7 @@ import * as core from "@actions/core";
 import * as io from "@actions/io";
 import * as exec from "@actions/exec";
 import * as tc from "@actions/tool-cache";
+import * as path from "path";
 
 async function getMacPorts(versionSpec: string = "2.5.4") {
   // check cache
@@ -24,7 +25,7 @@ async function getMacPorts(versionSpec: string = "2.5.4") {
     }
     let exitCode = await exec.exec("sudo /usr/sbin/installer", [
       "-pkg",
-      downloadPath,
+      path.join(downloadPath, filename),
       "-target",
       "/"
     ]);

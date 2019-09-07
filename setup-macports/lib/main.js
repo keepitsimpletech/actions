@@ -19,6 +19,7 @@ const core = __importStar(require("@actions/core"));
 const io = __importStar(require("@actions/io"));
 const exec = __importStar(require("@actions/exec"));
 const tc = __importStar(require("@actions/tool-cache"));
+const path = __importStar(require("path"));
 function getMacPorts(versionSpec = "2.5.4") {
     return __awaiter(this, void 0, void 0, function* () {
         // check cache
@@ -39,7 +40,7 @@ function getMacPorts(versionSpec = "2.5.4") {
             }
             let exitCode = yield exec.exec("sudo /usr/sbin/installer", [
                 "-pkg",
-                downloadPath,
+                path.join(downloadPath, filename),
                 "-target",
                 "/"
             ]);
